@@ -1,0 +1,6 @@
+[package]
+name = "linear"
+version = "0.1.0"
+authors = ["Kiel Geiger <kiel.geiger895@myci.csuci.edu>"]
+
+[dependencies]
