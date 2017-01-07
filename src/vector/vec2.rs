@@ -18,6 +18,16 @@ impl<T: Copy + Clone> Vector2<T> {
 		}
 	}
 
+	/*
+        Swizzle access for Vector2
+    */
+	pub fn yx(self) -> Vector2<T> {
+		Vector2 {
+			x: self.y,
+			y: self.x
+		}
+	}
+
 }
 
 impl<T: Copy + Clone + Debug> Index<usize> for Vector2<T> {
@@ -103,7 +113,7 @@ impl<T: Copy + Clone + Mul<Output = T>> Mul<T> for Vector2<T> {
 
 }
 
-impl<T: Copy + Clone + Mul<Output = T>> Mul for Vector2<T> {
+impl<T: Copy + Clone + Mul<Output = T>> Mul<Vector2<T>> for Vector2<T> {
 	type Output = Vector2<T>;
 
 	fn mul(self, rhs: Vector2<T>) -> Vector2<T> {
@@ -168,13 +178,45 @@ impl<T: Copy + Clone + Neg<Output = T>> Neg for Vector2<T> {
 #[allow(dead_code)]
 impl<T: Copy + Clone + Mul<Output = T> + Add<Output = T>> Vector2<T> {
 
-	pub fn dot(l: Vector2<T>,  r: Vector2<T>) -> T {
-		let product: Vector2<T> = l * r;
+	pub fn dot(self,  r: Vector2<T>) -> T {
+		let product: Vector2<T> = self * r;
 		let dot: T = product.x + product.y;
 
 		dot
 	}
 
+}
+
+#[allow(dead_code)]
+impl<T: Copy + Clone + Into<f64> + From<f64>> Vector2<T> {
+
+	pub fn angle_rad(self) -> f64 {
+		self.y.into().atan2(self.x.into())
+	}
+
+	pub fn angle_deg(self) -> f64 {
+		self.angle_rad().to_degrees()
+	}
+
+	pub fn mag(self) -> f64 {
+		let x: f64 = self.x.into();
+		let y: f64 = self.y.into();
+
+		((x * x) + (y * y)).sqrt()
+	}
+
+	pub fn proj(self, rhs: Vector2<T>) -> Vector2<T> {
+		let l_converted: Vector2<f64> = Vector2::new(self.x.into(), self.y.into());
+		let r_converted: Vector2<f64> = Vector2::new(rhs.x.into(), rhs.y.into());
+
+		let r_normal = r_converted / r_converted.mag();
+		let projected = r_normal * (l_converted.dot(r_converted));
+
+		Vector2 {
+			x: projected.x.into(),
+			y: projected.y.into()
+		}
+	}
 }
 
 #[allow(dead_code)]
@@ -198,18 +240,11 @@ impl Vector2<f64> {
 		self.y = self.y / mag;
 	}
 
-	pub fn angle_rad(self) -> f64 {
-		self.y.atan2(self.x)
-	}
-
-	pub fn angle_deg(self) -> f64 {
-		self.angle_rad().to_degrees()
-	}
-
 }
 
 #[allow(dead_code)]
 impl Vector2<f32> {
+
 	pub fn norm(self) -> Vector2<f32> {
 
 		let mag_sqr = (self.x * self.x) + (self.y * self.y);
@@ -228,25 +263,18 @@ impl Vector2<f32> {
 		self.y = self.y / mag;
 	}
 
-	pub fn angle_rad(self) -> f32 {
-		self.y.atan2(self.x)
-	}
-
-	pub fn angle_deg(self) -> f32 {
-		self.angle_rad().to_degrees()
-	}
-
 }
 
 pub type Vec2d = Vector2<f64>;
 pub type Vec2 = Vector2<f32>;
+pub type Vec2f = Vector2<f32>;
 
-pub type Vec2l = Vector2<i64>;
+pub type Vec2ll = Vector2<i64>;
 pub type Vec2i = Vector2<i32>;
 pub type Vec2s = Vector2<i16>;
 pub type Vec2b = Vector2<i8>;
 
-pub type Vec2ul = Vector2<u64>;
+pub type Vec2ull = Vector2<u64>;
 pub type Vec2ui = Vector2<u32>;
 pub type Vec2us = Vector2<u16>;
 pub type Vec2ub = Vector2<u8>;
