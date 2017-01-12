@@ -1,5 +1,4 @@
 use std::ops::*;
-use std::fmt::*;
 use std::{f32, f64};
 use vector::vec2::*;
 use vector::vec3::*;
@@ -51,6 +50,9 @@ impl<T: Copy + Clone> Vector4<T> {
         }
     }
 
+	pub fn dim(self) -> usize {
+		4
+	}
 
     /*
      *  NOTE: Swizzle functions below- very repetitive and prone to error.
@@ -472,12 +474,12 @@ impl<T: Copy + Clone> Vector4<T> {
     }
 }
 
-impl<T: Copy + Clone + Debug> Index<usize> for Vector4<T> {
+impl<T: Copy + Clone> Index<usize> for Vector4<T> {
 	type Output = T;
 
 	fn index(&self, idx: usize) -> &T {
 		if idx >= 4 {
-			panic!("Index {} out of bounds for {:?}", idx, *self);
+			panic!("index out of bounds: the len is 4 but the index is {}", idx);
 		} else if idx == 0 {
 			return &self.x;
 		} else if idx == 1{
@@ -491,11 +493,11 @@ impl<T: Copy + Clone + Debug> Index<usize> for Vector4<T> {
 
 }
 
-impl<T: Copy + Clone + Debug> IndexMut<usize> for Vector4<T> {
+impl<T: Copy + Clone> IndexMut<usize> for Vector4<T> {
 
 	fn index_mut<'a>(&'a mut self, idx: usize) -> &'a mut T {
 		if idx >= 4 {
-			panic!("Index {} out of bounds for {:?}", idx, *self);
+			panic!("index out of bounds: the len is 4 but the index is {}", idx);
 		} else if idx == 0 {
 			return &mut self.x;
 		} else if idx == 1 {

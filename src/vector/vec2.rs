@@ -1,5 +1,4 @@
 use std::ops::*;
-use std::fmt::*;
 use std::{f32, f64};
 
 #[derive(Copy, Clone, Debug)]
@@ -18,6 +17,10 @@ impl<T: Copy + Clone> Vector2<T> {
 		}
 	}
 
+	pub fn dim(self) -> usize {
+		2
+	}
+
 	/*
         Swizzle access for Vector2
     */
@@ -30,12 +33,12 @@ impl<T: Copy + Clone> Vector2<T> {
 
 }
 
-impl<T: Copy + Clone + Debug> Index<usize> for Vector2<T> {
+impl<T: Copy + Clone> Index<usize> for Vector2<T> {
 	type Output = T;
 
 	fn index(&self, idx: usize) -> &T {
 		if idx >= 2 {
-			panic!("Index {} out of bounds for {:?}", idx, *self);
+			panic!("index out of bounds: the len is 2 but the index is {}", idx);
 		} else if idx == 0 {
 			return &self.x;
 		} else {
@@ -45,11 +48,11 @@ impl<T: Copy + Clone + Debug> Index<usize> for Vector2<T> {
 
 }
 
-impl<T: Copy + Clone + Debug> IndexMut<usize> for Vector2<T> {
+impl<T: Copy + Clone> IndexMut<usize> for Vector2<T> {
 
 	fn index_mut<'a>(&'a mut self, idx: usize) -> &'a mut T {
 		if idx >= 2 {
-			panic!("Index {} out of bounds for {:?}", idx, *self);
+			panic!("index out of bounds: the len is 2 but the index is {}", idx);
 		} else if idx == 0 {
 			return &mut self.x;
 		} else {
