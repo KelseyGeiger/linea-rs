@@ -331,6 +331,11 @@ impl Vector3<f64> {
 	pub fn norm(self) -> Vector3<f64> {
 
 		let mag_sqr = (self.x * self.x) + (self.y * self.y) + (self.z * self.z);
+
+		if mag_sqr == 1.0 {
+			return self;
+		}
+
 		let mag = mag_sqr.sqrt();
 
 		let vec_scaled = self / mag;
@@ -340,6 +345,11 @@ impl Vector3<f64> {
 
 	pub fn normalize(&mut self) {
 		let mag_sqr = (self.x * self.x) + (self.y * self.y) + (self.z * self.z);
+
+		if mag_sqr == 1.0 {
+			return;
+		}
+
 		let mag = mag_sqr.sqrt();
 
 		self.x = self.x / mag;
@@ -355,6 +365,11 @@ impl Vector3<f32> {
 	pub fn norm(self) -> Vector3<f32> {
 
         let mag_sqr = (self.x * self.x) + (self.y * self.y) + (self.z * self.z);
+
+		if mag_sqr == 1.0f32 {
+			return self;
+		}
+
 		let mag = mag_sqr.sqrt();
 
 		let vec_scaled = self / mag;
@@ -364,6 +379,11 @@ impl Vector3<f32> {
 
 	pub fn normalize(&mut self) {
 		let mag_sqr = (self.x * self.x) + (self.y * self.y) + (self.z * self.z);
+
+		if mag_sqr == 1.0f32 {
+			return;
+		}
+
 		let mag = mag_sqr.sqrt();
 
 		self.x = self.x / mag;

@@ -36,7 +36,7 @@ impl<T: Copy + Clone> Mat3x3<T> {
         (3, 3)
     }
 
-    ///Returns a Mat3x3 which has been transposed, i.e. m[0][1] and m[1][0] swapped for Mat3x3
+    ///Returns a Mat3x3 which has been transposed
     pub fn as_transposed(&self) -> Mat3x3<T> {
         let mut m = Mat3x3 {
             m: self.m.clone()
@@ -251,7 +251,7 @@ impl<T: Copy + Clone + Neg<Output = T>> Neg for Mat3x3<T> {
 
 #[allow(dead_code)]
 impl<T: Copy + Clone + Neg<Output = T> + Mul<Output = T> + Sub<Output = T>> Mat3x3<T> {
-    fn adjugate(&self) -> Mat3x3<T> {
+    pub fn adjugate(&self) -> Mat3x3<T> {
         let mut adj = self.clone();
 
         for i in 0..self.dim().0 {
@@ -275,7 +275,7 @@ impl<T: Copy + Clone + Neg<Output = T> + Mul<Output = T> + Sub<Output = T>> Mat3
 
 #[allow(dead_code)]
 impl<T: Copy + Clone + Sub<Output = T>> Mat3x3<T> {
-    fn from_diagonal(diag: Vector3<T>) -> Mat3x3<T> {
+    pub fn from_diagonal(diag: Vector3<T>) -> Mat3x3<T> {
         let zero = diag.x - diag.x;
 
         Mat3x3 {
@@ -287,7 +287,7 @@ impl<T: Copy + Clone + Sub<Output = T>> Mat3x3<T> {
         }
     }
 
-    fn scale(s: T) -> Mat3x3<T> {
+    pub fn scale(s: T) -> Mat3x3<T> {
         let zero: T = s - s;
 
         Mat3x3 {
@@ -302,7 +302,7 @@ impl<T: Copy + Clone + Sub<Output = T>> Mat3x3<T> {
 
 #[allow(dead_code)]
 impl<T: Copy + Clone + From<u8>> Mat3x3<T> {
-    fn identity() -> Mat3x3<T> {
+    pub fn identity() -> Mat3x3<T> {
         let one: T = From::from(1u8);
         let zero: T = From::from(0u8);
 
@@ -318,7 +318,7 @@ impl<T: Copy + Clone + From<u8>> Mat3x3<T> {
 
 #[allow(dead_code)]
 impl<T: Copy + Clone + Mul<Output = T> + Add<Output = T> + Sub<Output = T> + Neg<Output = T>> Mat3x3<T> {
-    fn det(&self) -> T {
+    pub fn det(&self) -> T {
         let mut _det: T = self[0][0] - self[0][0];
 
         for i in 0..self.dim().0 {
@@ -333,7 +333,7 @@ impl<T: Copy + Clone + Mul<Output = T> + Add<Output = T> + Sub<Output = T> + Neg
 
 #[allow(dead_code)]
 impl<T: Copy + Clone + Mul<Output = T> + Add<Output = T> + Sub<Output = T> + Div<Output = T> + Neg<Output = T> + PartialEq> Mat3x3<T> {
-    fn inverse(&self) -> Mat3x3<T> {
+    pub fn inverse(&self) -> Mat3x3<T> {
         let zero: T = self[0][0] - self[0][0];
         let determinate = self.det();
 

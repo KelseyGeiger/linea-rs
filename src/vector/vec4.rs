@@ -693,8 +693,12 @@ impl<T: Copy + Clone + Into<f64> + From<f64>> Vector4<T> {
 impl Vector4<f64> {
 
 	pub fn norm(self) -> Vector4<f64> {
-
 		let mag_sqr = (self.x * self.x) + (self.y * self.y) + (self.z * self.z) + (self.w * self.w);
+
+		if mag_sqr == 1.0 {
+			return self;
+		}
+
 		let mag = mag_sqr.sqrt();
 
 		let vec_scaled = self / mag;
@@ -704,6 +708,11 @@ impl Vector4<f64> {
 
 	pub fn normalize(&mut self) {
 		let mag_sqr = (self.x * self.x) + (self.y * self.y) + (self.z * self.z) + (self.w * self.w);
+
+		if mag_sqr == 1.0 {
+			return;
+		}
+
 		let mag = mag_sqr.sqrt();
 
 		self.x = self.x / mag;
@@ -718,8 +727,12 @@ impl Vector4<f64> {
 impl Vector4<f32> {
 
 	pub fn norm(self) -> Vector4<f32> {
-
         let mag_sqr = (self.x * self.x) + (self.y * self.y) + (self.z * self.z) + (self.w * self.w);
+
+		if mag_sqr == 1.0f32 {
+			return self;
+		}
+
 		let mag = mag_sqr.sqrt();
 
 		let vec_scaled = self / mag;
@@ -729,6 +742,11 @@ impl Vector4<f32> {
 
 	pub fn normalize(&mut self) {
 		let mag_sqr = (self.x * self.x) + (self.y * self.y) + (self.z * self.z) + (self.w * self.w);
+
+		if mag_sqr == 1.0f32 {
+			return;
+		}
+
 		let mag = mag_sqr.sqrt();
 
 		self.x = self.x / mag;
