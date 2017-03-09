@@ -57,7 +57,7 @@ impl<T: Copy + Clone> Mat4x4<T> {
         }
     }
 
-    pub fn minor(&self, i: usize, j: usize) -> Mat3x3<T> {
+    pub fn submatrix(&self, i: usize, j: usize) -> Mat3x3<T> {
         let col_0 = (i+1) % self.dim().0;
         let col_1 = (i+2) % self.dim().0;
         let col_2 = (i+3) % self.dim().0;
@@ -306,30 +306,6 @@ impl<T: Copy + Clone + Neg<Output = T>> Neg for Mat4x4<T> {
 }
 
 #[allow(dead_code)]
-impl<T: Copy + Clone + Add<Output = T> + Neg<Output = T> + Mul<Output = T> + Sub<Output = T>> Mat4x4<T> {
-    pub fn adjugate(&self) -> Mat4x4<T> {
-        let mut adj = self.clone();
-
-        for i in 0..self.dim().0 {
-            for j in 0..self.dim().1 {
-                let negative: bool = (i + j) % 2 == 0;
-                let sub_matrix = self.minor(i, j);
-
-                if negative {
-                    adj[i][j] = -sub_matrix.det();
-                } else {
-                    adj[i][j] = sub_matrix.det();
-                }
-            }
-        }
-
-        adj.transpose();
-
-        adj
-    }
-}
-
-#[allow(dead_code)]
 impl<T: Copy + Clone + Sub<Output = T>> Mat4x4<T> {
     pub fn from_diagonal(diag: Vector4<T>) -> Mat4x4<T> {
         let zero = diag.x - diag.x;
@@ -388,12 +364,47 @@ impl<T: Copy + Clone + Mul<Output = T> + Add<Output = T> + Sub<Output = T> + Neg
         let mut _det: T = self[0][0] - self[0][0];
 
         for i in 0..self.dim().0 {
-            let m = self.minor(i, 0);
+            let m = self.submatrix(i, 0);
 
             _det = if (i % 2) == 1 {_det + (m.det() * self[i][0])} else {_det - (m.det() * self[i][0])};
         }
 
         return _det
+    }
+
+    pub fn minor(&self) -> Mat4x4<T> {
+        let mut minor = self.clone();
+
+        for i in 0..self.dim().0 {
+            for j in 0..self.dim().1 {
+                let sub = self.submatrix(i, j);
+
+                minor[i][j] = sub.det();
+            }
+        }
+
+        minor
+    }
+}
+
+#[allow(dead_code)]
+impl<T: Copy + Clone + Add<Output = T> + Neg<Output = T> + Mul<Output = T> + Sub<Output = T>> Mat4x4<T> {
+    pub fn adjugate(&self) -> Mat4x4<T> {
+        let mut adj = self.minor();
+
+        for i in 0..self.dim().0 {
+            for j in 0..self.dim().1 {
+                let negative: bool = (i + j) % 2 == 0;
+
+                if negative {
+                    adj[i][j] = -adj[i][j];
+                }
+            }
+        }
+
+        adj.transpose();
+
+        adj
     }
 }
 

@@ -51,7 +51,7 @@ impl<T: Copy + Clone> Mat2x2<T> {
         self.m[1][0] = tmp_01;
     }
 
-    pub fn minor(&self, i: usize, j: usize) -> T {
+    pub fn submatrix(&self, i: usize, j: usize) -> T {
         let col = (i+1) % self.dim().0;
         let row = (j+1) % self.dim().1;
 
@@ -281,6 +281,20 @@ impl<T: Copy + Clone + From<u8>> Mat2x2<T> {
 impl<T: Copy + Clone + Mul<Output = T> + Sub<Output = T>> Mat2x2<T> {
     pub fn det(&self) -> T {
         (self[0][0] * self[1][1]) - (self[1][0] * self[0][1])
+    }
+
+    pub fn minor(&self) -> Mat2x2<T> {
+        let mut minor = self.clone();
+
+        for i in 0..self.dim().0 {
+            for j in 0..self.dim().1 {
+                let sub = self.submatrix(i, j);
+
+                minor[i][j] = sub;
+            }
+        }
+
+        minor
     }
 }
 
